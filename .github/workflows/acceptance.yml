@@ -1,0 +1,45 @@
+name: NearPortal acceptance
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance-factorial:
+    name: acceptance-factorial
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.23.12'
+          cache: false
+      - name: Test factorial
+        env:
+          GOTOOLCHAIN: local
+        run: go test -count=1 -timeout=20s -v ./tasks/factorial
+  acceptance-minmax:
+    name: acceptance-minmax
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.23.12'
+          cache: false
+      - name: Test minmax
+        env:
+          GOTOOLCHAIN: local
+        run: go test -count=1 -timeout=20s -v ./tasks/minmax
